@@ -6,14 +6,20 @@ Infer number and type of plant communities for a geographic polygon of interest.
 
 ### Description of the code:
 From GBIF, pull in all plant occurrence records for a given polygon and circumscribe community types based on species abundances and geographic distances.
+
 `numpy`
+
 `pandas`
+
 `pygbif`
+
 `geopandas`
+
 `PySAL`
 
 ### Description of the data:
 pandas DataFrame with species, latitude, longitude
+
 matrix of geographic distances between each occurrence record of the same species
 
 ### Description of user interaction:
