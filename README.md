@@ -1,5 +1,5 @@
 # project
-Outline of `capcom` program
+Outline of `capcomm` program
 
 ### Description of project goal:
 Infer number and type of plant communities for a geographic polygon of interest.
