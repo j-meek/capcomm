@@ -4,7 +4,7 @@
 ### goal
 Query species occurrence records (GBIF) to calculate biodiversity metrics and infer number/type of ecological communities for a geographic polygon of interest. Community inference will be based on species abundances, geographic distances between occurrences, and climate data (WorldClim). 
 
-### dependencies:
+### dependencies
 `numpy`
 `pandas`
 `pygbif`
@@ -40,16 +40,16 @@ After occurrence records have been downloaded, they will be filtered into a simp
 
 ```
 genus 			species 		latitude		longitude
-Pedicularis		groenlandica	39				-100
-Pedicularis		groenlandica	42				-99
-Pedicularis		groenlandica	35				-102
+Pedicularis		groenlandica		39				-100
+Pedicularis		groenlandica		42				-99
+Pedicularis		groenlandica		35				-102
 Delphinium		occidentale		39				-114
 Delphinium		occidentale		38				-110
 Lupinus			argenteus		42				-120
 Lupinus			argenteus		41				-119
 ```
 
-### user interaction:
+### user interaction
 I think a Jupyter notebook would be the best way for a user to interact with this program because it would enable customized filtering of occurrence records and  map visualization of results. For users without Python experience, a webapp would be a nice way to visualize biodiversity and community metrics of different regions of the world. I envision an app with a dropdown menu where the user could select a polygon of interest (in this case, a mountain range) and a taxonomic focus (e.g., "Plantae"), and press "Run" to return the output. 
 
 ### output
