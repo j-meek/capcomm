@@ -1,0 +1,27 @@
+Information GMBA mountain inventory_V1.2
+-----------------------------
+Version: V1.2
+Note: for a description of the polygon delineation methods, please read Körner et al., 2017. 
+
+General:   
+- The folders required to work in a GIS software are organized in three folders: 
+1) "GMBA mountain inventory_V1.2(entire world)" provides 1 set of GIS files (.dbf, .prj, .shp, .shx) showing the full world-wide inventory. The attribute table includes object name, country, and the online resource used for its identification, if available (see below).  
+2) "GMBA mountain inventory_V1.2(by mega-region)" provides 8 sets of GIS files (.dbf, .prj, .shp, .shx), one for each mega-region of the world (Africa, Asia, Australia, Europe, Greenland, North America, Oceania, and South America). Each of these sets of files shows an inventory for a specific mega-region and the attribute table includes object name, country, and the online resource used for its identification, if available (see below). 
+3) "GMBA mountain inventory_V1.2(supplementary large-scale set)" provides 1 set of GIS files (.dbf, .prj, .shp, .shx) showing an inventory of 17 large mountain systems of the world. Any of these 17 objects includes at least all the inventory entries listed in "GMBA mountain inventory_V1.2(entire world)" that are part of the specific mountain system but can include additional terrain that is not included in any specific inventory entry listed in "GMBA mountain inventory_V1.2(entire world)". The attribute table inclues object name and country.  
+
+Note 2): "GMBA mountain inventory_V1.2(supplementary large-scale set)" is made available solely for large scale comparisons and for the rapid localization of large mountain systems. 
+ 
+- The document "GMBA mountain inventory_V1.2_multi-languages.xls" provides all available Wikipedia translations of the mountain ranges in English, German, French, Spanish, Portuguese, and Chinese. Note that only the main Wikipedia name is provided. 
+
+- The document "GMBA mountain inventory V1.2_log file.txt" lists all the changes performed to subsequent versions of the inventory
+
+
+How to cite:
+When using the GMBA mountain inventory data, please cite:  
+Körner C, Jetz W, Paulsen J, Payne D, Rudmann-Maurer K, Spehn E (2017) A global inventory of mountains for bio-geographical applications. Alpine Botany 127(1): 1-15 and the dataset DOI: 10.7892/boris.106896. 
+Note that if using a customized version of this inventory users are requested to cite the above but clearly indicate that modifications have been made. 
+
+Important Notes: 
+- any change to the shape files provided online are under the responsibility of the user performing the change 
+- modifications to any polygon will result in changes in the mountain statistics published in Körner et al., 2017 
+- users are welcome to send suggestions for modifications to the GMBA International Project Office for review (gmba@ips.unibe.ch). Accepted changes will be incorporated in updated versions.   

@@ -5,21 +5,24 @@ A program to specify polygon or multipolygon shape and infer ecological
 community structure within based on species occurrence records.
 """
 
-#import numpy as np
-#import pandas as pd
-# import geopandas
+import numpy as np
+import pandas as pd
+import geopandas
 import requests
 
-# GBIF with geopandas
 
 # Read in mountain polygons
-# mountains = geopandas.read_file("./layers/GMBA_mountain_inventory_V1.2_entire_\
-                                # world/GMBA Mountain Inventory_v1.2-World.shp")
+mountains = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_entire_\
+                                world/GMBA Mountain Inventory_v1.2-World.shp")
+
 
 class Mountain:
+    """
+    TODO:
+    """
     def __init__(self, dataframe):
         self.polygons = [
-            Polygon(name, poly) for (name, poly) in 
+            Polygon(name, poly) for (name, poly) in
             dataframe[:, ["name", "geometry"]]
         ]
 
@@ -29,22 +32,19 @@ class Mountain:
         """
 
 
-
-
 class Polygon:
     """
-    Polygon holds shape information for plotting a polygon, and a 
+    Polygon holds shape information for plotting a polygon, and a
     dataframe of points inside that polygon, and ...
 
     Parameters:
     -----------
-    name: 
+    name:
     polygon: geojson polygon format object.
     """
     def __init__(self, name, polygon):
         self.name = name
         self.polygon = polygon
-
 
     def get_occurrences_in_polygon(self, taxa=6):
         """
@@ -64,7 +64,6 @@ class Polygon:
         print(res.url)
         return res.json()
 
-
     def convert_json_to_dataframe(self):
         """
         TODO:
@@ -72,16 +71,14 @@ class Polygon:
 
     def plot_with_mpl(self, ):
         """
-        TODO: 
+        TODO:
         """
-
 
     def convert_shape(self):
         """
         convert shapefile formats (e.g., .shp file to .geojson)
         """
         self.to_file("{self}.geojson", driver='GeoJSON')
-
 
 
 if __name__ == "__main__":
@@ -93,5 +90,5 @@ if __name__ == "__main__":
     pol = Polygon(name="test", polygon=example_poly)
     print(pol)
 
-    # get json records from 
+    # get json records from
     pol.get_occurrences_in_polygon(taxa=6)
