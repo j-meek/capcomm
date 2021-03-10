@@ -5,7 +5,7 @@ Query species occurrence records (from GBIF) to calculate biodiversity metrics a
 
 ### in development
 
-To contribute,
+To contribute:
 ```
 conda install numpy pandas pygbig geopandas -c conda-forge
 
