@@ -40,13 +40,13 @@ After occurrence records have been downloaded, they will be filtered into a simp
 
 ```
 genus 			species 		latitude		longitude
-Pedicularis		groenlandica		39				-100
-Pedicularis		groenlandica		42				-99
-Pedicularis		groenlandica		35				-102
-Delphinium		occidentale		39				-114
-Delphinium		occidentale		38				-110
-Lupinus			argenteus		42				-120
-Lupinus			argenteus		41				-119
+Pedicularis		groenlandica		39			-100
+Pedicularis		groenlandica		42			-99
+Pedicularis		groenlandica		35			-102
+Delphinium		occidentale		39			-114
+Delphinium		occidentale		38			-110
+Lupinus			argenteus		42			-120
+Lupinus			argenteus		41			-119
 ```
 
 ### user interaction
