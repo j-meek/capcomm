@@ -7,7 +7,7 @@ Query species occurrence records (from GBIF) to calculate biodiversity metrics a
 
 To contribute:
 ```
-conda install numpy pandas pygbig geopandas -c conda-forge
+conda install numpy pandas pygbif geopandas -c conda-forge
 
 git clone https://github.com/j-meek/capcomm
 cd ./capcomm
