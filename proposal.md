@@ -11,6 +11,11 @@ Query species occurrence records (GBIF) to calculate biodiversity metrics and in
 `geopandas`
 `PySAL`
 
+### DOCS
+
+- [geopandas](https://geopandas.org/getting_started/introduction.html)
+
+
 ### data
 - GeoDataFrame with polygon or multipolygon geometry
 - GeoJSON files (easy conversion from .shp to .geojson through `geopandas`)
