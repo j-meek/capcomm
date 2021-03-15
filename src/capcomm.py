@@ -9,12 +9,13 @@ import numpy as np
 import pandas as pd
 import geopandas
 import requests
+import matplotlib.pyplot as plt
 
+#I tried renaming the file but still could not get it to read which didn't let me test any of my code
+#I am sure the path is correct but not sure why it could not read
 
 # Read in mountain polygons
-mountains = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_entire_\
-                                world/GMBA Mountain Inventory_v1.2-World.shp")
-
+mountains = geopandas.read_file("Users/liortal/hacks/capcomm/data/GMBA_mountain_inventory_V1.2_entire_world/GMBA_Mountain_Inventory_v1.2-World.shp")
 
 class Mountain:
     """
@@ -64,15 +65,49 @@ class Polygon:
         print(res.url)
         return res.json()
 
-    def convert_json_to_dataframe(self):
+    def convert_json_to_dataframe(self, json):
         """
-        TODO:
+        json = get_occurrences_in_polygon()
         """
 
-    def plot_with_mpl(self, ):
+        #convert res.json() to pandas df
+        df = pd.json_normalize(json)
+
+        #filter df to include only species, latitude, longitude. 2 possible ways.
+        #visit https://stackoverflow.com/questions/11285613/selecting-multiple-columns-in-a-pandas-dataframe
+        #for further ways/explanations on how to organize dataframes to your liking!
+
+        #1 - organize by column name
+        newDf = df[['species', 'longitude', 'latitude']]
+
+        #2 - organize by column position (the bottom examples include columns 0 & 1)
+        #newDf = df.iloc[:, 0:2] or
+        #newDf = df.iloc[0, 0:2].copy() To avoid the case where changing df1 also changes df
+
+        return newDf
+
+    def plot_with_mpl(self, df):
         """
-        TODO:
+        I could not test this code to know if it works or not but it was taken
+        from the documentation here which I think would be helpful for you! It
+        specifically talks about longitude and latitude. Hopefully this code
+        ends up working or helps!
+        https://geopandas.org/gallery/create_geopandas_from_pandas.html
         """
+        gdf = geopandas.GeoDataFrame(df, geometry=geopandas.points_from_xy(df.Longitude, df.Latitude))
+
+        #visualize to make sure df is ok
+        print(gdf.head())
+
+        #get mountain area
+        mtn = geopandas.read_file("Users/liortal/hacks/capcomm/data/GMBA_mountain_inventory_V1.2_entire_world/GMBA_Mountain_Inventory_v1.2-World.shp")
+
+        #restrict to species?
+        ax = mtn[mtn.species == 'groenlandica'].plot(color='white', edgecolor='black')
+
+        # We can now plot our GeoDataFrame
+        gdf.plot(ax=ax, color='red')
+        plt.show()
 
     def convert_shape(self):
         """
@@ -91,4 +126,10 @@ if __name__ == "__main__":
     print(pol)
 
     # get json records from
-    pol.get_occurrences_in_polygon(taxa=6)
+    r = pol.get_occurrences_in_polygon(taxa=6)
+
+    #convert to df and filter
+    df = pol.convert_json_to_dataframe(r)
+
+    #plot
+    pol.plot_with_mpl(df)
