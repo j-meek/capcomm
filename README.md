@@ -13,3 +13,6 @@ git clone https://github.com/j-meek/capcomm
 cd ./capcomm
 pip install -e .
 ```
+
+### minimal working example
+open src/capcomm-dev.ipynb and play around!
