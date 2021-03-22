@@ -5,32 +5,55 @@ A program to specify polygon or multipolygon shape and infer ecological
 community structure within based on species occurrence records.
 """
 
-import numpy as np
 import pandas as pd
 import geopandas
 import requests
 import matplotlib.pyplot as plt
+from loguru import logger
 
-#I tried renaming the file but still could not get it to read which didn't let me test any of my code
-#I am sure the path is correct but not sure why it could not read
+# ------------------------------------------------------------------------------
+# Data
+# "large-scale set" of mountain polygons (17 polygons)
+large = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_supplementary_large-scale-set/GMBA mountain inventory_V1.2-LargeScale.shp")
 
-# Read in mountain polygons
-mountains = geopandas.read_file("Users/liortal/hacks/capcomm/data/GMBA_mountain_inventory_V1.2_entire_world/GMBA_Mountain_Inventory_v1.2-World.shp")
+# Mountain polygons for "entire_world" (1,048 polygons)
+world = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_entire_world/GMBA Mountain Inventory_v1.2-World.shp")
 
-class Mountain:
+# Mountain polygons by mega-region
+africa = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Africa.shp")
+asia = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Asia.shp")
+australia = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Australia.shp")
+europe = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Europe.shp")
+greenland = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Greenland.shp")
+n_america = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-NorthAmerica.shp")
+oceania = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Oceania.shp")
+s_america = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-SouthAmerica.shp")
+# ------------------------------------------------------------------------------
+# logger.debug("meow")
+
+
+class Data:
     """
-    TODO:
+    Create individual Polygon objects for each row of shape data
     """
     def __init__(self, dataframe):
         self.polygons = [
-            Polygon(name, poly) for (name, poly) in
-            dataframe[:, ["name", "geometry"]]
+            Polygon(name, poly) for name, poly in [
+                dataframe.iloc[i][["Name", "geometry"]]
+                for i in range(len(dataframe))]
         ]
 
-    def drawing(self):
+    def filter_range(self):
+        """
+        subselect by name or country
+        """
+
+    def draw(self, index):
         """
         TODO...
         """
+        print(self.polygons[index].name)
+        self.polygons[index].polygon
 
 
 class Polygon:
@@ -62,7 +85,6 @@ class Polygon:
                 "limit": 100,
                }
         )
-        print(res.url)
         return res.json()
 
     def convert_json_to_dataframe(self, json):
@@ -117,6 +139,9 @@ class Polygon:
 
 
 if __name__ == "__main__":
+
+    # Read in mountain polygons
+    world = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_entire_world/GMBA Mountain Inventory_v1.2-World.shp")
 
     # get example polygon (load with geopandas from ...)
     example_poly = "..."
