@@ -11,6 +11,12 @@ import requests
 import matplotlib.pyplot as plt
 from loguru import logger
 
+# HL: geopandas handles and displays geometry objects from shapefiles using shapely, without needing to import the package.  I'm not
+# sure how you were able to call and use shapely modules separately from geopandas without importing shapely, but I needed to bring in
+# my own shapely.
+import shapely
+from shapely.geometry import Polygon, MultiPolygon  
+
 # ------------------------------------------------------------------------------
 # Data
 # "large-scale set" of mountain polygons (17 polygons)
@@ -36,17 +42,29 @@ class Data:
     """
     Create individual Polygon objects for each row of shape data
     """
-    def __init__(self, dataframe):
+
+    # HL: GeoDataFrames already have a geometry column with Polygon objects, so it might be easier to save the whole thing to a class
+    # object and subset them out as needed.  Relatedly, I don't know if you need a separate draw function, unles you want it to do 
+    # something more specific than display shapes.
+    def __init__(self, gdf):
+        self.gdf = gdf
         self.polygons = [
-            Polygon(name, poly) for name, poly in [
-                dataframe.iloc[i][["Name", "geometry"]]
-                for i in range(len(dataframe))]
+                (name, poly) for name, poly in [
+                gdf.iloc[i][["Name", "geometry"]]
+                for i in range(len(gdf))]
         ]
 
-    def filter_range(self):
+    def filter_range(self, name = None, country = None):
         """
         subselect by name or country
         """
+        # HL: a simple way to implement name/country filtering.
+        if name:
+            fname = self.gdf[self.gdf.Name == name]
+            return fname
+        if country:
+            fcountry = self.gdf[self.gdf.Country == country]
+            return fcountry
 
     def draw(self, index):
         """
@@ -70,16 +88,22 @@ class Polygon:
         self.name = name
         self.polygon = polygon
 
-    def get_occurrences_in_polygon(self, taxa=6):
+    def get_occurrences_in_polygon(self, taxa=6, tol=0.05):
         """
         query GBIF for occurrence records within polygon and return
         as JSON
         """
+
+        # HL: this function gave errors before because GBIF can only handle geometry strings up to about 1500 characters.  To get
+        # around this, you can use the shapely function simplify(), which approximates a Polygon shape in fewer points.  It has
+        # a parameter called tolerance that controls how far the "simplified" points can be from the originals.  This creates a
+        # tradeoff between shape accuracy and string length, so I think it's best to leave the option to the user.  Separately,
+        # did you want to incorporate a while-loop to get around the API's query limit?
         res = requests.get(
             url="https://api.gbif.org/v1/occurrence/search/",
             params={
                 "kingdomKey": taxa,
-                "geometry": self.polygon,
+                "geometry": self.polygon.simplify(tolerance=tol),
                 "hasCoordinate": "true",
                 "offset": 0,
                 "limit": 100,
