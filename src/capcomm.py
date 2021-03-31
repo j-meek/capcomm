@@ -2,7 +2,7 @@
 
 """
 A program to specify polygon or multipolygon shape and infer ecological
-community structure within based on species occurrence records.
+community structure based on species occurrence records.
 """
 
 import pandas as pd
@@ -10,34 +10,16 @@ import geopandas
 import requests
 import matplotlib.pyplot as plt
 from loguru import logger
-
-# HL: geopandas handles and displays geometry objects from shapefiles using shapely, without needing to import the package.  I'm not
-# sure how you were able to call and use shapely modules separately from geopandas without importing shapely, but I needed to bring in
-# my own shapely.
 import shapely
-from shapely.geometry import Polygon, MultiPolygon  
+from shapely.geometry import Polygon, MultiPolygon
 
 # ------------------------------------------------------------------------------
-# Data
-# "large-scale set" of mountain polygons (17 polygons)
-large = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_supplementary_large-scale-set/GMBA mountain inventory_V1.2-LargeScale.shp")
 
-# Mountain polygons for "entire_world" (1,048 polygons)
-world = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_entire_world/GMBA Mountain Inventory_v1.2-World.shp")
-
-# Mountain polygons by mega-region
-africa = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Africa.shp")
-asia = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Asia.shp")
-australia = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Australia.shp")
-europe = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Europe.shp")
-greenland = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Greenland.shp")
-n_america = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-NorthAmerica.shp")
-oceania = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-Oceania.shp")
-s_america = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_mega-region/GMBA Mountain Inventory_v1.2-SouthAmerica.shp")
 # ------------------------------------------------------------------------------
-# logger.debug("meow")
 
 
+# Not sure what Henry meant to do here, but it works with Polygon(name, poly),
+# but doesn't work here. See dev notebook.
 class Data:
     """
     Create individual Polygon objects for each row of shape data
@@ -49,7 +31,7 @@ class Data:
     def __init__(self, gdf):
         self.gdf = gdf
         self.polygons = [
-                (name, poly) for name, poly in [
+            (name, poly) for name, poly in [
                 gdf.iloc[i][["Name", "geometry"]]
                 for i in range(len(gdf))]
         ]
@@ -58,11 +40,10 @@ class Data:
         """
         subselect by name or country
         """
-        # HL: a simple way to implement name/country filtering.
         if name:
             fname = self.gdf[self.gdf.Name == name]
             return fname
-        if country:
+        elif country:
             fcountry = self.gdf[self.gdf.Country == country]
             return fcountry
 
@@ -90,15 +71,19 @@ class Polygon:
 
     def get_occurrences_in_polygon(self, taxa=6, tol=0.05):
         """
-        query GBIF for occurrence records within polygon and return
-        as JSON
+        query GBIF for occurrence records within polygon and return as JSON
         """
 
-        # HL: this function gave errors before because GBIF can only handle geometry strings up to about 1500 characters.  To get
-        # around this, you can use the shapely function simplify(), which approximates a Polygon shape in fewer points.  It has
-        # a parameter called tolerance that controls how far the "simplified" points can be from the originals.  This creates a
-        # tradeoff between shape accuracy and string length, so I think it's best to leave the option to the user.  Separately,
-        # did you want to incorporate a while-loop to get around the API's query limit?
+        # GBIF can only handle geometry strings up to about 4000 characters.
+        # To get around this, you can use the shapely function simplify(),
+        # which approximates a Polygon shape in fewer points. It has a
+        # parameter called tolerance that controls how far the "simplified"
+        # points can be from the originals. This creates a tradeoff between
+        # shape accuracy and string length, so I think it's best to leave the
+        # option to the user.
+
+        # Separately, did you want to incorporate a while-loop to get around
+        # the API's query limit?
         res = requests.get(
             url="https://api.gbif.org/v1/occurrence/search/",
             params={
