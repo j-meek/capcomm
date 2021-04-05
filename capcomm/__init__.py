@@ -7,4 +7,5 @@ records
 
 __version__ = "0.0.1"
 
-from src.capcomm import Data, Polygon
+from capcomm.capcomm import Data, Polygon
+from capcomm.data import options, load, download
