@@ -7,5 +7,4 @@ records
 
 __version__ = "0.0.1"
 
-from capcomm.capcomm import Data, Polygon
-from capcomm.data import options, load, download
+from capcomm.data import options, load, taxon_info, Dataset, Region
