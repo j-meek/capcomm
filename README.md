@@ -7,12 +7,12 @@ A program to download, visualize, and compare species occurrence records across 
 
 To contribute:
 ```
-conda install numpy pandas requests geopandas -c conda-forge
+conda install pandas geopandas requests pygbif folium -c conda-forge
 
-git clone https://github.com/j-meek/capcomm
-cd ./capcomm
+git clone https://github.com/j-meek/mountaineer
+cd ./mountaineer
 pip install -e .
 ```
 
 ### minimal working example
-open capcomm/capcomm-dev.ipynb and play around!
+open notebooks/mountaineer-dev.ipynb and play around!

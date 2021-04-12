@@ -8,11 +8,11 @@ from setuptools import setup
 
 # build command
 setup(
-    name="capcomm",
+    name="mountaineer",
     version="0.0.1",
-    url="https://github.com/j-meek/capcomm",
+    url="https://github.com/j-meek/mountaineer",
     author="Jared Meek",
     author_email="jm4761@columbia.edu",
-    description="A package for inferring ecological community structure",
+    description="A package for comparing mountain biodiversity",
     classifiers=["Programming Language :: Python :: 3"]
 )
