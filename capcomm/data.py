@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 from pygbif import species
 from loguru import logger
 import shapely
-from shapely.geometry import Polygon, MultiPolygon
 
 
 def options():
@@ -63,6 +62,13 @@ def load(file):
     return data
 
 
+def save(df, filename):
+    """
+    save downloaded occurrence records to file
+    """
+    df.to_csv(filename)
+
+
 def taxon_info(taxon):
     """
     use pygbif.species to get GBIF taxonKey info
@@ -73,11 +79,11 @@ def taxon_info(taxon):
 
 class Dataset:
     """
-    Create individual Region objects for each row of .geojson data
+    Create individual Region objects for each row in GeoDataFrame
     """
     def __init__(self, gdf):       
         self.gdf = gdf
-        self.region = [
+        self.regions = [
             Region(name, poly) for name, poly in [
                 gdf.iloc[i][["Name", "geometry"]]
                 for i in range(len(gdf))]
@@ -100,8 +106,8 @@ class Dataset:
 
 class Region:
     """
-    Region holds shape information for plotting a polygon, and a
-    dataframe of points inside that polygon, and ...
+    Region holds shape information for plotting a polygon, and functions to
+    query GBIF for occurrence records within that polygon.
 
     Parameters:
     -----------
@@ -111,6 +117,10 @@ class Region:
     def __init__(self, name, polygon):
         self.name = name
         self.polygon = polygon
+
+    def _repr_(self):
+        rep = 'Region... '
+        return rep
 
     def get_occurrences(self, taxonKey, offset=0, limit=20, tol=0):
         """
@@ -177,63 +187,33 @@ class Region:
         json = get_occurrences_in_polygon()
         """
 
-        #convert res.json() to pandas df
+        # convert res.json() to pandas df
         df = pd.json_normalize(json)
 
-        #filter df to include only species, latitude, longitude. 2 possible ways.
-        #visit https://stackoverflow.com/questions/11285613/selecting-multiple-columns-in-a-pandas-dataframe
-        #for further ways/explanations on how to organize dataframes to your liking!
+        # subset by column name
+        new_df = df[['kingdom', 'phylum', 'order', 'family', 'genus',
+                    'species', 'decimalLongitude', 'decimalLatitude']].rename(
+                        columns={'decimalLongitude': 'longitude',
+                                 'decimalLatitude': 'latitude'})
 
-        #1 - organize by column name
-        new_df = df[['species', 'longitude', 'latitude']]
+        return new_df
 
-        #2 - organize by column position (the bottom examples include columns 0 & 1)
-        #newDf = df.iloc[:, 0:2] or
-        #newDf = df.iloc[0, 0:2].copy() To avoid the case where changing df1 also changes df
-
-        return newDf
-
-    def plot_with_mpl(self, df):
+    def plot_with_mpl(self, df, region=None):
         """
-        I could not test this code to know if it works or not but it was taken
-        from the documentation here which I think would be helpful for you! It
-        specifically talks about longitude and latitude. Hopefully this code
-        ends up working or helps!
-        https://geopandas.org/gallery/create_geopandas_from_pandas.html
+        convert df of occurrence records into gdf and plot on static map
         """
-        gdf = geopandas.GeoDataFrame(df, geometry=geopandas.points_from_xy(df.Longitude, df.Latitude))
+        gdf = geopandas.GeoDataFrame(df, geometry=geopandas.points_from_xy(
+            df.longitude, df.latitude))
 
-        #visualize to make sure df is ok
+        # visualize to make sure df is ok
         print(gdf.head())
 
-        #get mountain area
-        mtn = geopandas.read_file("Users/liortal/hacks/capcomm/data/GMBA_mountain_inventory_V1.2_entire_world/GMBA_Mountain_Inventory_v1.2-World.shp")
+        # get mountain polygons
+        mtn = load('world')
 
-        #restrict to species?
-        ax = mtn[mtn.species == 'groenlandica'].plot(color='white', edgecolor='black')
+        # restrict to region of interest
+        ax = mtn[mtn.Name == region].plot(color='white', edgecolor='black')
 
         # We can now plot our GeoDataFrame
-        gdf.plot(ax=ax, color='red')
+        gdf.plot(ax=ax, color='green')
         plt.show()
-
-
-if __name__ == "__main__":
-
-    # Read in mountain polygons
-    world = geopandas.read_file("../data/GMBA_mountain_inventory_V1.2_entire_world/GMBA Mountain Inventory_v1.2-World.shp")
-
-    # get example polygon (load with geopandas from ...)
-    example_poly = "..."
-
-    # create example Polygon object
-    pol = Polygon(name="test", polygon=example_poly)
-    print(pol)
-
-    # get json records from
-    r = pol.get_occurrences_in_polygon(taxa=6)
-
-    #convert to df and filter
-    df = pol.convert_json_to_dataframe(r)
-
-    #plot
-    pol.plot_with_mpl(df)
