@@ -2,12 +2,13 @@
 
 """
 Load in polygon data and download occurrence records within a specific polygon
-from GBIF and save as version to be used with capcomm.
+from GBIF and save as version to be used with mountaineer.
 """
 import pandas as pd
 import geopandas
 import requests
 import matplotlib.pyplot as plt
+import folium
 from pygbif import species
 from loguru import logger
 import shapely
