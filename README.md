@@ -16,3 +16,5 @@ pip install -e .
 
 ### minimal working example
 open notebooks/mountaineer-dev.ipynb and play around!
+
+![world](https://github.com/j-meek/mountaineer/blob/main/visual/world-folium.png)
