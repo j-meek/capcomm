@@ -1,5 +1,5 @@
 # `mountaineer`
-**m**ountain **e**cology **e**volution **r**evolution
+**m**ountain **e**cology and **e**volution **r**evolution
 
 A program to download, visualize, and compare species occurrence records across mountain ranges.
 
