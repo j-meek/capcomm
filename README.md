@@ -1,7 +1,7 @@
-# `capcomm`
-**c**oordinate **a**nd **p**olygon **comm**unities
+# `mountaineer`
+**m**ountain **e**cology **e**volution **r**evolution
 
-Query species occurrence records (from GBIF) to calculate biodiversity metrics and infer number/type of ecological communities for a geographic polygon of interest. Community inference is based on species abundances, geographic distances between occurrences, and climate data (WorldClim).
+A program to download, visualize, and compare species occurrence records across mountain ranges.
 
 ### in development
 
@@ -15,4 +15,4 @@ pip install -e .
 ```
 
 ### minimal working example
-open src/capcomm-dev.ipynb and play around!
+open capcomm/capcomm-dev.ipynb and play around!
