@@ -3,7 +3,7 @@
 
 A program to download, visualize, and compare species occurrence records across mountain ranges.
 
-![asia](https://github.com/j-meek/mountaineer/blob/main/visual/asia-folium.pn$
+![asia](https://github.com/j-meek/mountaineer/blob/main/visual/asia-folium.png)
 
 ### in development
 
