@@ -1,7 +1,7 @@
 # `mountaineer`
 **m**ountain **e**cology and **e**volution **r**evolution
 
-A program to download, visualize, and compare species occurrence records across mountain ranges.
+A program to download, visualize, and compare species occurrence records and geospatial data across mountain ranges.
 
 ![asia](https://github.com/j-meek/mountaineer/blob/main/visual/asia-folium.png)
 
@@ -9,7 +9,7 @@ A program to download, visualize, and compare species occurrence records across 
 
 To contribute:
 ```
-conda install pandas geopandas requests pygbif folium -c conda-forge
+conda install pandas geopandas requests pygbif folium earthengine-api -c conda-forge
 
 git clone https://github.com/j-meek/mountaineer
 cd ./mountaineer
