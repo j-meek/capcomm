@@ -8,9 +8,7 @@ import pandas as pd
 import geopandas
 import requests
 import matplotlib.pyplot as plt
-import folium
 from pygbif import species
-from loguru import logger
 import shapely
 
 
@@ -196,6 +194,8 @@ class Region:
                     'species', 'decimalLongitude', 'decimalLatitude']].rename(
                         columns={'decimalLongitude': 'longitude',
                                  'decimalLatitude': 'latitude'})
+
+        new_df = new_df.drop_duplicates().reset_index(drop=True)
 
         return new_df
 
